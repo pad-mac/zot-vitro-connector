@@ -97,6 +97,10 @@ ItemSaver.prototype = {
 		}
 		catch (e) {
 			if (e.status == 0) {
+				// Zot Vitro: no saving to zotero.org from here; ZotFlow does that
+				if (ZOTERO_CONFIG.VITRO) {
+					throw new Error(`${ZOTERO_CONFIG.VITRO.PLUGIN_NAME} in ${ZOTERO_CONFIG.VITRO.APP_NAME} is not reachable`);
+				}
 				return this._saveToServer(items, attachmentCallback, itemsDoneCallback);
 			}
   			throw e;
@@ -174,6 +178,9 @@ ItemSaver.prototype = {
 		}
 		
 		payload.items = Zotero.Utilities.deepCopy(items);
+		if (ZOTERO_CONFIG.VITRO) {
+			payload.zotflow = await this._apiItemsForZotFlow(items);
+		}
 
 		// Only pass attachments that are to be saved by linking
 		for (let item of payload.items) {
@@ -197,6 +204,31 @@ ItemSaver.prototype = {
 		return items;
 	},
 	
+	/**
+	 * Zot Vitro: the items as the Zotero web API takes them (one array per item: the
+	 * item, then its notes), converted here where the Zotero schema is at hand, the way
+	 * _saveToServer() converts them. ZotFlow writes them with the web API under the keys
+	 * they carry.
+	 */
+	async _apiItemsForZotFlow(items) {
+		const automaticTags = await Zotero.Prefs.getAsync("automaticTags");
+		return {
+			version: 1,
+			apiItems: items.map((item) => {
+				let apiItem = Zotero.Utilities.deepCopy(item);
+				delete apiItem.attachments;
+				delete apiItem.id;
+				if (this._proxy && apiItem.url) {
+					apiItem.url = this._proxy.toProper(apiItem.url);
+				}
+				if (!automaticTags && Array.isArray(apiItem.tags)) {
+					apiItem.tags = apiItem.tags.filter(tag => typeof tag !== 'object' || tag.type !== 1);
+				}
+				return Zotero.Utilities.Item.itemToAPIJSON(apiItem);
+			})
+		};
+	},
+
 	async saveAttachmentsToZotero(attachmentCallback) {
 		let promises = []
 

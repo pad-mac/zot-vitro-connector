@@ -378,6 +378,22 @@ Zotero.Inject = {
 		if (zoteroIsOnline) {
 			return true;
 		}
+		// Zot Vitro: nothing goes to zotero.org from here; ask to open Obsidian instead
+		if (ZOTERO_CONFIG.VITRO) {
+			let { APP_NAME, PLUGIN_NAME, CONNECTOR_NAME } = ZOTERO_CONFIG.VITRO;
+			let result = await this.confirm({
+				button1Text: Zotero.getString('general_tryAgain'),
+				button2Text: Zotero.getString('general_cancel'),
+				title: `Is ${APP_NAME} running?`,
+				message: `The ${CONNECTOR_NAME} saves to ${PLUGIN_NAME} in ${APP_NAME}. Open ${APP_NAME} on this computer `
+					+ `and turn on ${PLUGIN_NAME}'s connector (Settings → ${PLUGIN_NAME} → Connector), then try again.`
+			});
+			if (result.button == 1) {
+				await Zotero.Promise.delay(500);
+				return this.checkActionToServer(true);
+			}
+			return false;
+		}
 		// null means Safari blocked the localhost request, leaving Zotero's status unknown
 		let localhostDenied = zoteroIsOnline === null;
 		if (!localhostDenied && Zotero.isSafari) {

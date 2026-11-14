@@ -1,0 +1,13 @@
+#!/bin/bash
+# Zot Vitro: build the Firefox extension and pack it as an .xpi (unsigned).
+# Usage: scripts/vitro/build-firefox [VERSION]
+set -euo pipefail
+ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/../.. && pwd )"
+VERSION="${1:-5.0.900}"
+cd "$ROOT_DIR"
+./build.sh -p b -v "$VERSION"
+mkdir -p dist
+XPI="$ROOT_DIR/dist/zot-vitro-connector-$VERSION.xpi"
+rm -f "$XPI"
+(cd build/firefox && zip -qr -X "$XPI" .)
+echo "$XPI"

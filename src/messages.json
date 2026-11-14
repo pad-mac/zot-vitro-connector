@@ -61,10 +61,10 @@
 	},
 
 	"extension_description": {
-		"message": "Save references to Zotero from your web browser"
+		"message": "Save references from your web browser to ZotFlow in Obsidian"
 	},
 	"extension_defaultTitle": {
-		"message": "Save to Zotero"
+		"message": "Save to ZotFlow"
 	},
 	"browserAction_status_online": {
 		"message": "$1 is Online",

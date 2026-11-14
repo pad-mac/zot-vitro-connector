@@ -24,6 +24,14 @@
 */
 
 const ZOTERO_CONFIG = {
+	// Zot Vitro: what receives the saves. ZotFlow in Obsidian, not the Zotero app;
+	// nothing is saved to zotero.org directly from here (ZotFlow does that).
+	VITRO: {
+		APP_NAME: 'Obsidian',
+		PLUGIN_NAME: 'ZotFlow',
+		CONNECTOR_NAME: 'Zot Vitro Connector',
+		REPO_URL: 'https://github.com/pad-mac/zot-vitro-connector',
+	},
 	CLIENT_NAME: 'Zotero',
 	DOMAIN_NAME: 'zotero.org',
 	SETTINGS_URL: 'https://repo.zotero.org/settings',
@@ -31,7 +39,7 @@ const ZOTERO_CONFIG = {
 	REPOSITORY_CHECK_INTERVAL: 86400, // 24 hours
 	REPOSITORY_RETRY_INTERVAL: 3600, // 1 hour
 	REPOSITORY_CHANNEL: 'trunk',
-	ALWAYS_FETCH_FROM_REPOSITORY: false,
+	ALWAYS_FETCH_FROM_REPOSITORY: true, // Zot Vitro: translators from repo.zotero.org only (ZotFlow serves none)
 	BASE_URI: 'https://zotero.org/',
 	WWW_BASE_URL: 'https://www.zotero.org/',
 	CLIENT_DOWNLOAD_URL: 'https://www.zotero.org/download',

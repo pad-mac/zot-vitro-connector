@@ -1,5 +1,5 @@
 {
-	"name": "Zotero Connector",
+	"name": "Zot Vitro Connector",
 	"manifest_version": 2,
 	"version": "AUTOFILLED",
 	"description": "__MSG_extension_description__",
@@ -60,7 +60,7 @@
 		"itemSaver.js"
 	],
 	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; frame-src 'self'",
-	"homepage_url": "https://www.zotero.org/",
+	"homepage_url": "https://github.com/pad-mac/zot-vitro-connector",
 	"icons": {
 		"16": "Icon-16.png",
 		"32": "Icon-32.png",
@@ -81,8 +81,7 @@
 	"minimum_chrome_version": "55",
 	"applications": {
 		"gecko": {
-			"id": "zotero@chnm.gmu.edu",
-			"update_url": "https://zotero.org/AUTOFILLED",
+			"id": "zot-vitro-connector@pad-mac.github.io",
 			"strict_min_version": "58.0"
 		}
 	}

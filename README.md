@@ -1,3 +1,10 @@
+# Zot Vitro Connector
+
+A fork of the Zotero Connector that saves to ZotFlow in Obsidian. See [VITRO.md](VITRO.md).
+The original README follows.
+
+---
+
 # Zotero Connectors
 
 [![Build Status](https://travis-ci.org/zotero/zotero-connectors.svg?branch=master)](https://travis-ci.org/zotero/zotero-connectors)

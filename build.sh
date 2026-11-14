@@ -218,6 +218,13 @@ function copyResources {
 	done
 	popd > /dev/null
 	
+	# Zot Vitro: the extension's own name and title in every language (English for now)
+	for messages in "$browser_builddir"/_locales/*/messages.json; do
+		jq --slurpfile en "$SRCDIR/messages.json" \
+			'.extension_description = $en[0].extension_description | .extension_defaultTitle = $en[0].extension_defaultTitle' \
+			"$messages" > "$messages.tmp" && mv "$messages.tmp" "$messages"
+	done
+	
 	# Copy node_modules libs
 	mkdir "$browser_builddir/lib"
 	
