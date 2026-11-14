@@ -40,9 +40,14 @@ Checks:
 
 - `node scripts/vitro/check-conversion.js build/firefox` converts sample items the way a save
   does (in a Chromium page, with the built scripts).
-- `scripts/vitro/e2e/run.sh /path/to/zotflow-evo` saves a test article with its PDF from end to
-  end: the built extension in Chromium (the MV3 build shares the code that changed), translators
-  from repo.zotero.org, ZotFlow's real connector server with Zotero's web API faked.
+- `scripts/vitro/e2e/run.sh /path/to/zotflow-evo` saves from end to end: the built extension in
+  Chromium (the MV3 build shares the code that changed), translators from repo.zotero.org,
+  ZotFlow's real connector server with Zotero's web API faked. A test article with its PDF; one
+  with only a DOI (the PDF found by Zotero's open-access search, for real); HTML snapshots; the
+  popup's changes; a plain page; a PDF tab; a web page's request (refused).
+
+HTML snapshots and finding open-access PDFs are the Connector's own, unchanged: it asks for them
+when ZotFlow's ping says so (`automaticSnapshots`, `downloadAssociatedFiles`), as with Zotero.
 
 ## Trying it in Firefox
 

@@ -48,6 +48,22 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     await Zotero.Messaging.sendMessage("updateSession", { target: "L2", tags: "macy, to read", note: "Read <b>this</b>" }, tab, null);
   });
   await sleep(4000);
+  // An article with only a DOI: the PDF from Zotero's open-access search (in ZotFlow).
+  const doiPage = await ctx.newPage();
+  await doiPage.goto("http://localhost:8089/doi-article");
+  for (let i = 0; i < 20; i++) {
+    const n = await sw.evaluate(async () => {
+      const [tab] = await browser.tabs.query({ url: "http://localhost:8089/doi-article" });
+      return (Zotero.Connector_Browser.getTabInfo(tab.id).translators || []).length;
+    });
+    if (n) break;
+    await sleep(500);
+  }
+  await sw.evaluate(async () => {
+    const [tab] = await browser.tabs.query({ url: "http://localhost:8089/doi-article" });
+    Zotero.Connector_Browser.saveWithTranslator(tab, 0, { fallbackOnFailure: true });
+  });
+  await sleep(13000);
   // A page no translator reads: a web page item.
   const plain = await ctx.newPage();
   await plain.goto("http://localhost:8089/plain");

@@ -3,6 +3,7 @@ import * as http from "http";
 import { createConnectorServer } from "connector/http";
 import { ConnectorHandler } from "connector/handler";
 import { ConnectorSessions } from "connector/sessions";
+import { findOpenAccessFile } from "connector/find-file";
 
 const log = (event: string, data: unknown) => console.log(JSON.stringify({ event, data }));
 let n = 0;
@@ -15,11 +16,20 @@ const api = {
   },
   async patchItem(libraryID: number, k: string, patch: any, version?: number) { log("patchItem", { libraryID, key: k, patch, version }); },
   async deleteItems(libraryID: number, keys: string[]) { log("deleteItems", { libraryID, keys }); },
-  async attachFile(t: any, file: any, parts: any) {
+  async attachFile(t: any, file: any, parts: any, options: any) {
     const head = new TextDecoder().decode(file.bytes.slice(0, 8));
-    log("attachFile", { target: t, contentType: file.contentType, extension: file.extension, title: file.title, url: file.url, size: file.bytes.length, head, parts });
+    log("attachFile", { target: t, contentType: file.contentType, extension: file.extension, size: file.bytes.length, head, parts, options });
     return key();
   },
+  // The real search (Zotero's open-access service, then the file), over Node's fetch.
+  findFile: (doi: string) =>
+    findOpenAccessFile(doi, async (url, init) => {
+      log("fetch", `${init?.method ?? "GET"} ${url}`);
+      const res = await fetch(url, { method: init?.method, headers: init?.headers, body: init?.body });
+      const headers: Record<string, string> = {};
+      res.headers.forEach((v, k) => (headers[k] = v));
+      return { status: res.status, headers, bytes: new Uint8Array(await res.arrayBuffer()) };
+    }),
   async standaloneFile(t: any, file: any) {
     log("standaloneFile", { target: t, contentType: file.contentType, title: file.title, size: file.bytes.length });
     return key();
@@ -45,6 +55,7 @@ const handler = new ConnectorHandler(sessions, {
   defaultTarget: () => target,
   listed: () => {},
   holdSync: () => log("holdSync", null),
+  prefs: () => ({ files: true, snapshots: true }),
   failed: (m) => log("failed", m),
 });
 const server = createConnectorServer(http, handler, (e) => log("serverError", String(e)));
