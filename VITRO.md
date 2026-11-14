@@ -36,12 +36,18 @@ scripts/vitro/build-firefox        # → dist/zot-vitro-connector-<version>.xpi
 The version (default `5.0.900`) is also what the Connector tells repo.zotero.org it is, so it
 stays above the Zotero Connector's own versions.
 
-`node scripts/vitro/check-conversion.js build/firefox` converts sample items the way a save does
-(in a Chromium page, with the built scripts).
+Checks:
+
+- `node scripts/vitro/check-conversion.js build/firefox` converts sample items the way a save
+  does (in a Chromium page, with the built scripts).
+- `scripts/vitro/e2e/run.sh /path/to/zotflow-evo` saves a test article with its PDF from end to
+  end: the built extension in Chromium (the MV3 build shares the code that changed), translators
+  from repo.zotero.org, ZotFlow's real connector server with Zotero's web API faked.
 
 ## Trying it in Firefox
 
-1. In ZotFlow's settings, turn on **Connector** (desktop only; Obsidian must be running).
+1. In ZotFlow's settings (Sync → Browser connector), turn on **Save from the browser** (desktop
+   only; Obsidian must be running; needs ZotFlow's Zotero API key).
 2. In Firefox: `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → the `.xpi`
    (or `build/firefox/manifest.json`). It stays until Firefox restarts. Turn off the Zotero
    Connector while trying it, so only one button saves.

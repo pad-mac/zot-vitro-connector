@@ -386,7 +386,7 @@ Zotero.Inject = {
 				button2Text: Zotero.getString('general_cancel'),
 				title: `Is ${APP_NAME} running?`,
 				message: `The ${CONNECTOR_NAME} saves to ${PLUGIN_NAME} in ${APP_NAME}. Open ${APP_NAME} on this computer `
-					+ `and turn on ${PLUGIN_NAME}'s connector (Settings → ${PLUGIN_NAME} → Connector), then try again.`
+					+ `with ${PLUGIN_NAME}'s "Save from the browser" on (Settings → ${PLUGIN_NAME} → Sync), then try again.`
 			});
 			if (result.button == 1) {
 				await Zotero.Promise.delay(500);
